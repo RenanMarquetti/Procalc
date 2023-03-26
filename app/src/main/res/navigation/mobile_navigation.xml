@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/nav_sum_calculations_game">
+
+    <fragment
+        android:id="@+id/nav_sum_calculations_game"
+        android:name="com.example.procalc.view.SumCalculationGame"
+        android:label="@string/soma"
+        tools:layout="@layout/fragment_calculation_game"/>
+
+    <action android:id="@+id/to_nav_result"
+        app:destination="@+id/nav_result"/>
+
+    <fragment
+        android:id="@+id/nav_sub_calculations_game"
+        android:name="com.example.procalc.view.SubCalculationGame"
+        android:label="@string/sub"
+        tools:layout="@layout/fragment_calculation_game">
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_mult_calculations_game"
+        android:name="com.example.procalc.view.MultCalculationGame"
+        android:label="@string/multiplicacao"
+        tools:layout="@layout/fragment_calculation_game">
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_div_calculations_game"
+        android:name="com.example.procalc.view.DivCalculationGame"
+        android:label="@string/divisao"
+        tools:layout="@layout/fragment_calculation_game">
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_result"
+        android:name="com.example.procalc.view.ResultadoFragment"
+        android:label="@string/result"
+        tools:layout="@layout/fragment_results"/>
+</navigation>

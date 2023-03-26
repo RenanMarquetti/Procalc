@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/app_name"
+        android:textColor="@color/black"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/txt_operacao"
+        android:text="Soma"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title"/>
+
+    <LinearLayout
+        android:id="@+id/barra_config"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingHorizontal="10dp"
+        app:layout_constraintTop_toBottomOf="@id/txt_operacao">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Digitos: " />
+
+        <EditText
+            android:id="@+id/qtd_digitos"
+            android:layout_width="25dp"
+            android:layout_height="match_parent"
+            android:inputType="number"
+            android:text="1"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Numeros: " />
+
+        <EditText
+            android:id="@+id/qtd_num"
+            android:layout_width="25dp"
+            android:layout_height="match_parent"
+            android:inputType="number"
+            android:text="2" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Acurácia: " />
+
+        <TextView
+            android:id="@+id/txt_qtd_sem_errar"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="0" />
+    </LinearLayout>
+
+    <Chronometer
+        android:textSize="24dp"
+        android:id="@+id/chronometer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/barra_config"/>
+
+    <TextView
+        android:id="@+id/txt_conta"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:text="Click no botão abaixo para iniciar o treinamento"
+        android:textSize="24sp"
+        app:layout_constraintTop_toBottomOf="@id/chronometer" />
+
+
+    <EditText
+        android:id="@+id/input_res"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="40dp"
+        android:inputType="numberSigned"
+        android:maxLines="1"
+        app:layout_constraintTop_toBottomOf="@+id/txt_conta"
+        tools:layout_editor_absoluteX="20dp" />
+
+    <Button
+        android:id="@+id/btn_conferir"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Iniciar Sessão"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/input_res" />
+
+<!--    <Button
+        android:id="@+id/btn_relatorio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Relatorio"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_conta" />-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

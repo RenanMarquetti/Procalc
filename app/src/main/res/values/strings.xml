@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">ProCalc</string>
+    <string name="soma">Soma</string>
+    <string name="sub">Sutração</string>
+    <string name="multiplicacao">Multiplicação</string>
+    <string name="divisao">Divisão</string>
+    <string name="title_social">Social</string>
+    <string name="menu_abount">Sobre</string>
+    <string name="caculation_game">Contas</string>
+    <string name="result">Resultados</string>
+    <string name="escolha_operacao">"Operação: "</string>
+</resources>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+
+        <item android:id="@+id/nav_sum_calculations_game"
+            android:title="@string/soma"/>
+
+        <item android:id="@+id/nav_sub_calculations_game"
+            android:title="@string/sub"/>
+
+        <item android:id="@+id/nav_mult_calculations_game"
+            android:title="@string/multiplicacao"/>
+
+        <item android:id="@+id/nav_div_calculations_game"
+            android:title="@string/divisao"/>
+
+    </group>
+
+    <item android:title="Resultado">
+        <menu>
+            <item android:id="@+id/nav_result"
+                android:title="@string/result"/>
+        </menu>
+    </item>
+
+
+
+    <item android:title="@string/title_social">
+
+        <menu>
+            <item
+                android:id="@+id/nav_abount"
+                android:title="@string/menu_abount"/>
+        </menu>
+
+    </item>
+</menu>
