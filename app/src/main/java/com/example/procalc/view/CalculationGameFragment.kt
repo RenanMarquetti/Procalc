@@ -20,15 +20,15 @@ open class CalculationGameFragment(private val operacaoName: String = "Soma") : 
 
     internal lateinit var chronometer : Chronometer
     internal lateinit var txtConta: TextView
+    internal lateinit var inputDigitos: EditText
+    internal lateinit var inputNumeros: EditText
+    internal lateinit var operacao: TextView
+
     private lateinit var inputResult: EditText
     private lateinit var btnSessao: Button
     private lateinit var txtInvcto: TextView
     private lateinit var present: PresentCalculationGame
     private lateinit var service: InputMethodManager
-
-    internal lateinit var inputDigitos: EditText
-    internal lateinit var inputNumeros: EditText
-    internal lateinit var operacao: TextView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_calculation_game, container, false)
@@ -39,27 +39,10 @@ open class CalculationGameFragment(private val operacaoName: String = "Soma") : 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        inputDigitos = view.findViewById(R.id.qtd_digitos)
-        inputNumeros = view.findViewById(R.id.qtd_num)
-        chronometer = view.findViewById(R.id.chronometer)
-        txtConta = view.findViewById(R.id.txt_conta)
-        inputResult = view.findViewById(R.id.input_res)
-        btnSessao = view.findViewById(R.id.btn_conferir)
         operacao = view.findViewById(R.id.txt_operacao)
-
-        txtInvcto = view.findViewById(R.id.txt_qtd_sem_errar)
-
-        service = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-
         operacao.text = operacaoName
 
-        //val adapter = ArrayAdapter(view.context,android.R.layout.simple_list_item_1, arrayOf<String>("1","2","3","4","5","6","7","8","9"))
-
-
-        //inputDigitos.setText("1")
-
-        //inputDigitos.setAdapter(adapter)
-
+        inputDigitos = view.findViewById(R.id.qtd_digitos)
         inputDigitos.setOnFocusChangeListener {  view: View, b: Boolean ->
 
             val vazio = inputDigitos.text.toString().isEmpty() || inputDigitos.text.toString().toInt() <= 0
@@ -69,6 +52,8 @@ open class CalculationGameFragment(private val operacaoName: String = "Soma") : 
             if(btnSessao.text.toString() == "Encerrar Sessão") encerrarSessao()
         }
 
+
+        inputNumeros = view.findViewById(R.id.qtd_num)
         inputNumeros.setOnFocusChangeListener {  view: View, b: Boolean ->
 
             val vazio = inputNumeros.text.toString().isEmpty() || inputNumeros.text.toString().toInt() < 2
@@ -79,16 +64,22 @@ open class CalculationGameFragment(private val operacaoName: String = "Soma") : 
 
         }
 
-
+        inputResult = view.findViewById(R.id.input_res)
         inputResult.addTextChangedListener(object : TextWatcher {
 
             override fun afterTextChanged(s: Editable?) {
-                if(inputResult.text.toString().isNotEmpty()
+
+                val stringinputResult = inputResult.text.toString()
+
+                if(stringinputResult.isNotEmpty()
                     && btnSessao.text.toString() == "Encerrar Sessão"
-                    && inputResult.text.toString().toInt() == present.res) {
-                    txtInvcto.text = present.conferirRes(inputResult.text.toString().toInt())
+                    && stringinputResult.toInt() == present.res) {
+
+                    txtInvcto.text = present.conferirRes(stringinputResult.toInt())
                     inputResult.text = null
+
                 }
+
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -108,6 +99,7 @@ open class CalculationGameFragment(private val operacaoName: String = "Soma") : 
             true
         }
 
+        btnSessao = view.findViewById(R.id.btn_conferir)
         btnSessao.setOnClickListener {
 
             when(btnSessao.text.toString()) {
@@ -116,7 +108,8 @@ open class CalculationGameFragment(private val operacaoName: String = "Soma") : 
             }
         }
 
-
+        txtConta = view.findViewById(R.id.txt_conta)
+        txtConta.isClickable = true
         txtConta.setOnClickListener{
 
             if(txtConta.text.toString() == "Click aqui para iniciar o treinamento") {
@@ -131,22 +124,25 @@ open class CalculationGameFragment(private val operacaoName: String = "Soma") : 
         }
 
         present = PresentCalculationGame(this)
-
         present.getIdSessao()
 
-        txtConta.isClickable = true
+        chronometer = view.findViewById(R.id.chronometer)
+
+        txtInvcto = view.findViewById(R.id.txt_qtd_sem_errar)
+
+        service = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
+
 
     }
 
     override fun onStop() {
         super.onStop()
-        Log.i("stop","Stop")
         encerrarSessao()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.i("destruir","destruir")
         encerrarSessao()
     }
 
