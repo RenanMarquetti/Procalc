@@ -11,6 +11,7 @@ import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.annotation.RequiresApi
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.procalc.R
@@ -45,49 +46,36 @@ open class CalculationGameFragment(private val operacaoName: String = "Soma") : 
         inputDigitos = view.findViewById(R.id.qtd_digitos)
         inputDigitos.setOnFocusChangeListener {  view: View, b: Boolean ->
 
-            val vazio = inputDigitos.text.toString().isEmpty() || inputDigitos.text.toString().toInt() <= 0
+            validarInput(view as EditText,1)
 
-            if(vazio) inputDigitos.setText("1")
-
-            if(btnSessao.text.toString() == "Encerrar Sessão") encerrarSessao()
+            encerrarSessao()
         }
 
 
         inputNumeros = view.findViewById(R.id.qtd_num)
         inputNumeros.setOnFocusChangeListener {  view: View, b: Boolean ->
 
-            val vazio = inputNumeros.text.toString().isEmpty() || inputNumeros.text.toString().toInt() < 2
+            validarInput(view as EditText,2)
 
-            if(vazio) inputNumeros.setText("2")
-
-            if(btnSessao.text.toString() == "Encerrar Sessão") encerrarSessao()
+            encerrarSessao()
 
         }
 
         inputResult = view.findViewById(R.id.input_res)
-        inputResult.addTextChangedListener(object : TextWatcher {
+        inputResult.doAfterTextChanged {
 
-            override fun afterTextChanged(s: Editable?) {
+            val stringinputResult = inputResult.text.toString()
 
-                val stringinputResult = inputResult.text.toString()
+            if(stringinputResult.isNotEmpty()
+                && btnSessao.text.toString() == "Encerrar Sessão"
+                && stringinputResult.toInt() == present.res) {
 
-                if(stringinputResult.isNotEmpty()
-                    && btnSessao.text.toString() == "Encerrar Sessão"
-                    && stringinputResult.toInt() == present.res) {
-
-                    txtInvcto.text = present.conferirRes(stringinputResult.toInt())
-                    inputResult.text = null
-
-                }
+                txtInvcto.text = present.conferirRes(stringinputResult.toInt())
+                inputResult.text = null
 
             }
+        }
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            }
-        })
 
         inputResult.setOnEditorActionListener { textView , actionId, event ->
 
@@ -109,7 +97,6 @@ open class CalculationGameFragment(private val operacaoName: String = "Soma") : 
         }
 
         txtConta = view.findViewById(R.id.txt_conta)
-        txtConta.isClickable = true
         txtConta.setOnClickListener{
 
             if(txtConta.text.toString() == "Click aqui para iniciar o treinamento") {
@@ -136,6 +123,16 @@ open class CalculationGameFragment(private val operacaoName: String = "Soma") : 
 
     }
 
+    fun validarInput(editText: EditText, valueMin: Int) {
+
+        val editTextString = editText.text.toString()
+
+        val vazio = editTextString.isEmpty() || editTextString.toInt() < valueMin
+
+        if(vazio) editText.setText(valueMin.toString())
+
+    }
+
     override fun onStop() {
         super.onStop()
         encerrarSessao()
@@ -147,6 +144,9 @@ open class CalculationGameFragment(private val operacaoName: String = "Soma") : 
     }
 
     fun encerrarSessao() {
+
+        if(btnSessao.text.toString() == "Iniciar Sessão") return
+
         service.hideSoftInputFromWindow(inputResult.windowToken,0)
         chronometer.base = SystemClock.elapsedRealtime()
         chronometer.stop()
@@ -157,6 +157,8 @@ open class CalculationGameFragment(private val operacaoName: String = "Soma") : 
     }
 
     fun iniciarSessao() {
+
+        if(btnSessao.text.toString() == "Encerrar Sessão") return
 
         if(inputResult.requestFocus()) service.showSoftInput(inputResult, InputMethodManager.SHOW_IMPLICIT)
 
