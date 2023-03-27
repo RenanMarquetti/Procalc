@@ -5,7 +5,7 @@ import android.util.Log
 import android.widget.Toast
 import com.example.procalc.App
 import com.example.procalc.model.Conta
-import com.example.procalc.model.Sessao
+import com.example.procalc.model.SessaoData
 import com.example.procalc.view.CalculationGameFragment
 import kotlin.math.pow
 import kotlin.random.Random
@@ -146,7 +146,7 @@ class PresentCalculationGame(val view: CalculationGameFragment) {
 
         Log.i("inserindo sessao", idSessao.toString())
 
-        val currentSessao = Sessao(
+        val currentSessao = SessaoData(
             id = idSessao++,
             dataIni = dataIni,
             dataFim = Date(),

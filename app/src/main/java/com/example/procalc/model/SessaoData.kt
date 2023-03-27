@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import java.util.Date
 
 @Entity
-data class Sessao (
+data class SessaoData (
     @PrimaryKey(autoGenerate = true) val id: Int,
     @ColumnInfo(name = "data_ini") val dataIni: Date,
     @ColumnInfo(name = "data_fim") val dataFim: Date,

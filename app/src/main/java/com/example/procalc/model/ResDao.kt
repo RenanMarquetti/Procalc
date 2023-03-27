@@ -11,15 +11,15 @@ interface ResDao {
     fun insetConta(conta: Conta)
 
     @Insert
-    fun insetSessao(sessao: Sessao)
+    fun insetSessao(SessaoData: SessaoData)
 
     @Query("SELECT * FROM Conta WHERE operacao = :Operacao")
     fun getResultByOperacaco(Operacao: String) : List<Conta>
 
-    @Query("SELECT max(id) FROM Sessao")
+    @Query("SELECT max(id) FROM SessaoData")
     fun getIdLastSessao() : Int
 
-    @Query("SELECT max(id) FROM Sessao WHERE operacao = :Operacao")
+    @Query("SELECT max(id) FROM SessaoData WHERE operacao = :Operacao")
     fun getIdLastSessaoBySessao(Operacao: String) : Int
 
     @Query("SELECT * FROM Conta WHERE id_sessao = :idSessao")

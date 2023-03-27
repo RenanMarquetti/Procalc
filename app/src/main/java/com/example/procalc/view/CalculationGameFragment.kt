@@ -76,7 +76,6 @@ open class CalculationGameFragment(private val operacaoName: String = "Soma") : 
             }
         }
 
-
         inputResult.setOnEditorActionListener { textView , actionId, event ->
 
             if(inputResult.text.toString().isNotEmpty() && btnSessao.text.toString() == "Encerrar Sessão") {
