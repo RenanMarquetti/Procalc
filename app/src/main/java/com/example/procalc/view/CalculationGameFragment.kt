@@ -4,14 +4,13 @@ import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.annotation.RequiresApi
+import androidx.core.view.doOnAttach
 import androidx.core.widget.doAfterTextChanged
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.procalc.R
@@ -30,6 +29,7 @@ open class CalculationGameFragment(private val operacaoName: String = "Soma") : 
     private lateinit var txtInvcto: TextView
     private lateinit var present: PresentCalculationGame
     private lateinit var service: InputMethodManager
+    private var inputResultInt = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_calculation_game, container, false)
@@ -49,8 +49,8 @@ open class CalculationGameFragment(private val operacaoName: String = "Soma") : 
             validarInput(view as EditText,1)
 
             encerrarSessao()
-        }
 
+        }
 
         inputNumeros = view.findViewById(R.id.qtd_num)
         inputNumeros.setOnFocusChangeListener {  view: View, b: Boolean ->
@@ -64,13 +64,13 @@ open class CalculationGameFragment(private val operacaoName: String = "Soma") : 
         inputResult = view.findViewById(R.id.input_res)
         inputResult.doAfterTextChanged {
 
-            val stringinputResult = inputResult.text.toString()
+            if(it.isNullOrEmpty()) return@doAfterTextChanged
 
-            if(stringinputResult.isNotEmpty()
-                && btnSessao.text.toString() == "Encerrar Sessão"
-                && stringinputResult.toInt() == present.res) {
+            inputResultInt = inputResult.text.toString().toInt()
 
-                txtInvcto.text = present.conferirRes(stringinputResult.toInt())
+            if(resultIsValid() && inputResultInt == present.res) {
+
+                txtInvcto.text = present.conferirRes(inputResultInt)
                 inputResult.text = null
 
             }
@@ -78,9 +78,8 @@ open class CalculationGameFragment(private val operacaoName: String = "Soma") : 
 
         inputResult.setOnEditorActionListener { textView , actionId, event ->
 
-            if(inputResult.text.toString().isNotEmpty() && btnSessao.text.toString() == "Encerrar Sessão") {
-                txtInvcto.text = present.conferirRes(inputResult.text.toString().toInt())
-            }
+            if(resultIsValid()) txtInvcto.text = present.conferirRes(inputResultInt)
+
             inputResult.text = null
 
             true
@@ -89,24 +88,15 @@ open class CalculationGameFragment(private val operacaoName: String = "Soma") : 
         btnSessao = view.findViewById(R.id.btn_conferir)
         btnSessao.setOnClickListener {
 
-            when(btnSessao.text.toString()) {
-                "Iniciar Sessão" -> iniciarSessao()
-                "Encerrar Sessão" -> encerrarSessao()
-            }
+            if(sessaoIsActive()) encerrarSessao()
+            else iniciarSessao()
         }
 
         txtConta = view.findViewById(R.id.txt_conta)
         txtConta.setOnClickListener{
 
-            if(txtConta.text.toString() == "Click aqui para iniciar o treinamento") {
-                iniciarSessao()
-                return@setOnClickListener
-            }
-
-            val bundle = Bundle()
-            bundle.putString(ResultadoFragment.OPERACAO, operacao.text.toString())
-
-            findNavController().navigate(R.id.to_nav_result,bundle)
+            if(sessaoIsIntact()) iniciarSessao()
+            else goToResults()
         }
 
         present = PresentCalculationGame(this)
@@ -132,32 +122,47 @@ open class CalculationGameFragment(private val operacaoName: String = "Soma") : 
         encerrarSessao()
     }
 
+    fun goToResults() {
+
+        val bundle = Bundle()
+        bundle.putString(ResultadoFragment.OPERACAO, operacao.text.toString())
+
+        findNavController().navigate(R.id.to_nav_result,bundle)
+    }
+
+    fun sessaoIsActive(): Boolean = btnSessao.text.toString() == "Encerrar Sessão"
+    fun sessaoIsIntact(): Boolean = txtConta.text.toString() == "Click aqui para iniciar o treinamento"
+    fun resultIsValid(): Boolean = inputResult.text.toString().isNotEmpty() && sessaoIsActive()
+
     fun validarInput(editText: EditText, valueMin: Int) {
 
         val editTextString = editText.text.toString()
 
-        val vazio = editTextString.isEmpty() || editTextString.toInt() < valueMin
+        val valido = editTextString.isEmpty() || editTextString.toInt() < valueMin
 
-        if(vazio) editText.setText(valueMin.toString())
+        if(valido) editText.setText(valueMin.toString())
 
     }
 
     fun encerrarSessao() {
 
-        if(btnSessao.text.toString() == "Iniciar Sessão") return
+        if(!sessaoIsActive()) return
 
         service.hideSoftInputFromWindow(inputResult.windowToken,0)
+
         chronometer.base = SystemClock.elapsedRealtime()
         chronometer.stop()
+
         txtConta.text = present.getStringEndSessao()
         txtConta.isClickable = true
+
         btnSessao.text = "Iniciar Sessão"
         present.insertSessao()
     }
 
     fun iniciarSessao() {
 
-        if(btnSessao.text.toString() == "Encerrar Sessão") return
+        if(sessaoIsActive()) return
 
         if(inputResult.requestFocus()) service.showSoftInput(inputResult, InputMethodManager.SHOW_IMPLICIT)
 
@@ -166,6 +171,7 @@ open class CalculationGameFragment(private val operacaoName: String = "Soma") : 
         chronometer.start()
         present.getDados()
         txtConta.isClickable = false
+
     }
 
     fun showConta(stringConta: String) {
