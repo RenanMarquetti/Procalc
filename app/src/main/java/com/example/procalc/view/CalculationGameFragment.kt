@@ -122,16 +122,6 @@ open class CalculationGameFragment(private val operacaoName: String = "Soma") : 
 
     }
 
-    fun validarInput(editText: EditText, valueMin: Int) {
-
-        val editTextString = editText.text.toString()
-
-        val vazio = editTextString.isEmpty() || editTextString.toInt() < valueMin
-
-        if(vazio) editText.setText(valueMin.toString())
-
-    }
-
     override fun onStop() {
         super.onStop()
         encerrarSessao()
@@ -140,6 +130,16 @@ open class CalculationGameFragment(private val operacaoName: String = "Soma") : 
     override fun onDestroy() {
         super.onDestroy()
         encerrarSessao()
+    }
+
+    fun validarInput(editText: EditText, valueMin: Int) {
+
+        val editTextString = editText.text.toString()
+
+        val vazio = editTextString.isEmpty() || editTextString.toInt() < valueMin
+
+        if(vazio) editText.setText(valueMin.toString())
+
     }
 
     fun encerrarSessao() {
@@ -175,5 +175,4 @@ open class CalculationGameFragment(private val operacaoName: String = "Soma") : 
     fun resetChronometer() {
         chronometer.base = SystemClock.elapsedRealtime()
     }
-
 }
