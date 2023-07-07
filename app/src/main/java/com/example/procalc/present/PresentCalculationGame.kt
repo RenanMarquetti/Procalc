@@ -170,6 +170,6 @@ class PresentCalculationGame(val view: CalculationGameFragment) {
         if(idSessao == 0) Thread { idSessao = dao.getIdLastSessao() + 1 }.start()
     }
 
-    fun getStringEndSessao() = maxQtdSemErrar.toString() + " Max Invencivel\nClick para mais detalhes"
+    fun getStringEndSessao() = "$maxQtdSemErrar Max Invencivel\nClick para mais detalhes"
 
 }
